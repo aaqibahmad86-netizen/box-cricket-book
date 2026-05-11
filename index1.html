@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Box Cricket Booking</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<div class="container">
+
+  <h1>🏏 Box Cricket Booking</h1>
+
+  <label>Select Date</label>
+  <input type="date" id="bookingDate">
+
+  <h3>Available Time Slots</h3>
+
+  <div class="slots">
+
+    <button class="slot">6 PM - 7 PM</button>
+    <button class="slot">7 PM - 8 PM</button>
+    <button class="slot">8 PM - 9 PM</button>
+    <button class="slot">9 PM - 10 PM</button>
+
+  </div>
+
+  <input type="text" id="mobile" placeholder="Enter Mobile Number">
+
+  <h3>Payment QR</h3>
+
+  <img src="qr.png" class="qr">
+
+  <button id="bookBtn">I Have Paid & Book Slot</button>
+
+  <p id="message"></p>
+
+</div>
+
+<script src="script.js"></script>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+  apiKey: "AIzaSyDfudyf6A2o_zQYERCyBXeLlziAfQaDYf4",
+  authDomain: "box-cricket-book.firebaseapp.com",
+  projectId: "box-cricket-book",
+  storageBucket: "box-cricket-book.firebasestorage.app",
+  messagingSenderId: "730324891796",
+  appId: "1:730324891796:web:b76d512955b3fcfa639c81"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+window.db = db;
+window.addDoc = addDoc;
+window.collection = collection;
+window.getDocs = getDocs;
+
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+body{
+  font-family: Arial;
+  background:#111;
+  color:white;
+  display:flex;
+  justify-content:center;
+  padding:30px;
+}
+
+.container{
+  width:350px;
+  background:#1e1e1e;
+  padding:20px;
+  border-radius:10px;
+}
+
+h1{
+  text-align:center;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border:none;
+  border-radius:5px;
+}
+
+.slots{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:10px;
+}
+
+.slot{
+  padding:10px;
+  border:none;
+  background:green;
+  color:white;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+.slot.selected{
+  background:orange;
+}
+
+.qr{
+  width:100%;
+  margin-top:10px;
+  border-radius:10px;
+}
+
+#bookBtn{
+  width:100%;
+  margin-top:20px;
+  padding:12px;
+  background:#ff6600;
+  color:white;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+#message{
+  text-align:center;
+  margin-top:15px;
+  color:lightgreen;
+}
