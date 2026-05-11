@@ -80,7 +80,7 @@ input{
   cursor:pointer;
 }
 
-.card button{
+.deleteBtn{
   width:100%;
   padding:10px;
   border:none;
@@ -89,4 +89,7 @@ input{
   color:white;
   cursor:pointer;
   margin-top:10px;
+}
+.slot.booked{
+  background:red;
 }
