@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin Dashboard</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<div class="container">
+
+  <div class="top">
+    <h1>🏏 ADMIN PANEL</h1>
+    <p>Box Cricket Bookings</p>
+  </div>
+
+  <div class="card">
+
+    <input type="date" id="filterDate">
+
+    <button id="loadBtn">
+      Load Bookings
+    </button>
+
+    <div id="bookingsList"></div>
+
+  </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  deleteDoc,
+  doc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+   apiKey: "AIzaSyDfudyf6A2o_zQYERCyBXeLlziAfQaDYf4",
+  authDomain: "box-cricket-book.firebaseapp.com",
+  projectId: "box-cricket-book",
+  storageBucket: "box-cricket-book.firebasestorage.app",
+  messagingSenderId: "730324891796",
+  appId: "1:730324891796:web:b76d512955b3fcfa639c81",
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+window.db = db;
+window.collection = collection;
+window.getDocs = getDocs;
+window.deleteDoc = deleteDoc;
+window.doc = doc;
+
+</script>
+
+<script src="admin.js"></script>
+
+</body>
+</html>
