@@ -37,7 +37,9 @@ async function loadBookings(){
 
         <p>📱 ${data.mobile}</p>
 
-        <button onclick="deleteBooking('${booking.id}')">
+       
+        <button class="deleteBtn"
+onclick="deleteBooking('${booking.id}')">
 
           Delete Booking
 
