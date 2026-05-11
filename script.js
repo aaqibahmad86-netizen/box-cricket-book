@@ -6,6 +6,8 @@ slots.forEach(slot => {
 
   slot.addEventListener("click", () => {
 
+    if(slot.classList.contains("booked")) return;
+
     slots.forEach(btn => btn.classList.remove("selected"));
 
     slot.classList.add("selected");
@@ -16,11 +18,52 @@ slots.forEach(slot => {
 
 });
 
-document.getElementById("bookBtn").addEventListener("click", async () => {
+async function loadBookings(){
 
   const date = document.getElementById("bookingDate").value;
 
-  const mobile = document.getElementById("mobile").value;
+  slots.forEach(slot => {
+    slot.classList.remove("booked");
+  });
+
+  const querySnapshot =
+  await getDocs(collection(db, "bookings"));
+
+  querySnapshot.forEach((doc) => {
+
+    const data = doc.data();
+
+    if(data.date == date){
+
+      slots.forEach(slot => {
+
+        if(slot.innerText == data.slot){
+
+          slot.classList.add("booked");
+
+          slot.innerText = "BOOKED";
+
+        }
+
+      });
+
+    }
+
+  });
+
+}
+
+document.getElementById("bookingDate")
+.addEventListener("change", loadBookings);
+
+document.getElementById("bookBtn")
+.addEventListener("click", async () => {
+
+  const date =
+  document.getElementById("bookingDate").value;
+
+  const mobile =
+  document.getElementById("mobile").value;
 
   if(date == "" || selectedSlot == "" || mobile == ""){
     alert("Please fill all details");
@@ -36,7 +79,14 @@ document.getElementById("bookBtn").addEventListener("click", async () => {
 
   });
 
-  document.getElementById("message").innerText =
-  "✅ Booking Confirmed";
+  document.getElementById("message")
+  .innerText = "✅ Booking Confirmed";
+
+  window.open(
+    `https://wa.me/91${mobile}?text=🏏 Your Booking Confirmed for ${selectedSlot} on ${date}`,
+    "_blank"
+  );
+
+  loadBookings();
 
 });
