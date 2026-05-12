@@ -131,15 +131,19 @@ await uploadBytes(storageRef, file);
 
 const screenshotURL =
 await getDownloadURL(storageRef);
-  await addDoc(collection(db, "bookings"), {
+ await addDoc(collection(db, "bookings"), {
 
-    date: date,
-    slot: selectedSlot,
-    mobile: mobile,
-    createdAt: new Date()
+  date: date,
 
-  });
+  slot: selectedSlot,
 
+  mobile: mobile,
+
+  paymentScreenshot: screenshotURL,
+
+  createdAt: new Date()
+
+});
   document.getElementById("message")
   .innerText = "✅ Booking Confirmed";
 
