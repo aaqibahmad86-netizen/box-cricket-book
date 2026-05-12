@@ -1,51 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="viewport"
+  content="width=device-width, initial-scale=1.0">
 
   <title>Admin Dashboard</title>
 
   <link rel="stylesheet" href="style.css">
 
 </head>
+
 <body>
 
 <div class="container">
 
   <div class="top">
+
     <h1>🏏 ADMIN PANEL</h1>
+
     <p>Box Cricket Bookings</p>
+
   </div>
 
-  <div class="card">
+  <!-- FILTER BOX -->
 
-    <input type="date" id="filterDate">
+  <div class="filterBox">
+
+    <label>From Date</label>
+
+    <input type="date" id="fromDate">
+
+    <label>To Date</label>
+
+    <input type="date" id="toDate">
 
     <button id="loadBtn">
+
       Load Bookings
+
     </button>
-<div class="card">
-
-  <h3>Total Bookings:
-    <span id="totalBookings">0</span>
-  </h3>
-
-  <h3>Total Revenue:
-    ₹<span id="totalRevenue">0</span>
-  </h3>
-
-</div>
-    <div id="bookingsList"></div>
 
   </div>
 
-</div>
-<label>From Date</label>
-<input type="date" id="fromDate">
+  <!-- STATS -->
 
-<label>To Date</label>
-<input type="date" id="toDate">
+  <div class="stats">
+
+    <div class="statCard">
+
+      <h2 id="totalBookings">0</h2>
+
+      <p>Total Bookings</p>
+
+    </div>
+
+    <div class="statCard">
+
+      <h2>
+        ₹<span id="totalRevenue">0</span>
+      </h2>
+
+      <p>Total Revenue</p>
+
+    </div>
+
+  </div>
+
+  <!-- BOOKINGS -->
+
+  <div id="bookingsList"></div>
+
+</div>
+
 <script type="module">
 
 import { initializeApp }
@@ -62,12 +91,19 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
 
-   apiKey: "AIzaSyDfudyf6A2o_zQYERCyBXeLlziAfQaDYf4",
+  apiKey: "AIzaSyDfudyf6A2o_zQYERCyBXeLlziAfQaDYf4",
+
   authDomain: "box-cricket-book.firebaseapp.com",
+
   projectId: "box-cricket-book",
-  storageBucket: "box-cricket-book.firebasestorage.app",
+
+  storageBucket:
+  "box-cricket-book.firebasestorage.app",
+
   messagingSenderId: "730324891796",
-  appId: "1:730324891796:web:b76d512955b3fcfa639c81",
+
+  appId:
+  "1:730324891796:web:b76d512955b3fcfa639c81",
 
 };
 
