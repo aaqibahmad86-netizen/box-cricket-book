@@ -48,7 +48,7 @@ async function loadBookings(){
 
       bookingsList.innerHTML += `
 
-      <div class="card">
+     <div class="bookingCard">
 
         <h3>${data.slot}</h3>
 
