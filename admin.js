@@ -4,15 +4,24 @@ if(localStorage.getItem("admin") != "true"){
 
 }
 
+const SLOT_PRICE = 500;
+
 async function loadBookings(){
 
-  const filterDate =
-  document.getElementById("filterDate").value;
+  const fromDate =
+  document.getElementById("fromDate").value;
+
+  const toDate =
+  document.getElementById("toDate").value;
 
   const bookingsList =
   document.getElementById("bookingsList");
 
   bookingsList.innerHTML = "";
+
+  let totalBookings = 0;
+
+  let totalRevenue = 0;
 
   const querySnapshot =
   await getDocs(collection(db, "bookings"));
@@ -21,7 +30,21 @@ async function loadBookings(){
 
     const data = booking.data();
 
-    if(filterDate == "" || data.date == filterDate){
+    let show = true;
+
+    if(fromDate && data.date < fromDate){
+      show = false;
+    }
+
+    if(toDate && data.date > toDate){
+      show = false;
+    }
+
+    if(show){
+
+      totalBookings++;
+
+      totalRevenue += SLOT_PRICE;
 
       bookingsList.innerHTML += `
 
@@ -33,9 +56,10 @@ async function loadBookings(){
 
         <p>📱 ${data.mobile}</p>
 
-       
+        <p>💰 ₹${SLOT_PRICE}</p>
+
         <button class="deleteBtn"
-onclick="deleteBooking('${booking.id}')">
+        onclick="deleteBooking('${booking.id}')">
 
           Delete Booking
 
@@ -49,18 +73,24 @@ onclick="deleteBooking('${booking.id}')">
 
   });
 
+  document.getElementById("totalBookings")
+  .innerText = totalBookings;
+
+  document.getElementById("totalRevenue")
+  .innerText = totalRevenue;
+
 }
 
 window.deleteBooking = async function(id){
 
   const confirmDelete =
-  confirm("Delete this booking?");
+  confirm("Delete Booking?");
 
   if(!confirmDelete) return;
 
   await deleteDoc(doc(db, "bookings", id));
 
-  alert("Booking Deleted");
+  alert("Deleted");
 
   loadBookings();
 
