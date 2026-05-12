@@ -4,7 +4,6 @@ const slots = document.querySelectorAll(".slot");
 
 slots.forEach(slot => {
 
-  // Original slot text save
   slot.dataset.original = slot.innerText;
 
   slot.addEventListener("click", () => {
@@ -28,7 +27,6 @@ async function loadBookings(){
   const date =
   document.getElementById("bookingDate").value;
 
-  // Reset all slots
   slots.forEach(slot => {
 
     slot.classList.remove("booked");
@@ -82,11 +80,13 @@ document
   document.getElementById("mobile").value;
 
   if(date == "" || selectedSlot == "" || mobile == ""){
+
     alert("Please fill all details");
+
     return;
+
   }
 
-  // Prevent double booking
   let alreadyBooked = false;
 
   const querySnapshot =
@@ -100,7 +100,9 @@ document
       data.date == date &&
       data.slot == selectedSlot
     ){
+
       alreadyBooked = true;
+
     }
 
   });
@@ -113,37 +115,42 @@ document
 
   }
 
-await addDoc(collection(db, "bookings"), {
+  await addDoc(collection(db, "bookings"), {
 
-  date: date,
+    date: date,
 
-  slot: selectedSlot,
+    slot: selectedSlot,
 
-  mobile: mobile,
+    mobile: mobile,
 
-  createdAt: new Date()
+    createdAt: new Date()
 
-});
+  });
+
   document.getElementById("message")
   .innerText = "✅ Booking Confirmed";
 
-const customerMsg =
-`https://wa.me/91${mobile}?text=
+  // CUSTOMER WHATSAPP
+
+  const customerMsg =
+  `https://wa.me/91${mobile}?text=
 🏏 Booking Confirmed
 
 📅 Date: ${date}
 
 ⏰ Slot: ${selectedSlot}
 
-💰 Amount: ₹900
+💰 Amount: ₹900`;
 
-Thank You`;
+  window.open(customerMsg, "_blank");
 
-window.open(customerMsg, "_blank");
+  // ADMIN WHATSAPP
 
-const adminMsg =
-`https://wa.me/918860172386?text=
-🔥 New Booking Received
+  setTimeout(() => {
+
+    const adminMsg =
+    `https://wa.me/918860172386?text=
+🔥 NEW BOOKING
 
 📅 Date: ${date}
 
@@ -153,7 +160,9 @@ const adminMsg =
 
 💰 Amount: ₹900`;
 
-window.open(adminMsg, "_blank");
+    window.location.href = adminMsg;
+
+  }, 1200);
 
   loadBookings();
 
