@@ -93,3 +93,62 @@ input{
 .slot.booked{
   background:red;
 }
+.filterBox{
+  background:#1e293b;
+  padding:15px;
+  border-radius:10px;
+  margin-top:15px;
+}
+
+.filterBox label{
+  display:block;
+  margin-top:10px;
+  margin-bottom:5px;
+  font-size:14px;
+}
+
+.filterBox input{
+  width:100%;
+  box-sizing:border-box;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:15px;
+}
+
+.statCard{
+  background:#1e293b;
+  padding:15px;
+  border-radius:10px;
+  text-align:center;
+}
+
+.statCard h2{
+  margin:0;
+  color:#22c55e;
+}
+
+.bookingCard{
+  background:#1e293b;
+  padding:15px;
+  border-radius:10px;
+  margin-top:15px;
+}
+
+.bookingCard h3{
+  margin-top:0;
+}
+
+.deleteBtn{
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:red;
+  color:white;
+  cursor:pointer;
+  margin-top:10px;
+}
