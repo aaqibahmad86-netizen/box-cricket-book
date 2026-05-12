@@ -112,34 +112,14 @@ document
     return;
 
   }
-const file =
-document.getElementById("paymentScreenshot")
-.files[0];
 
-if(!file){
-
-  alert("Upload payment screenshot");
-
-  return;
-
-}
-
-const storageRef =
-ref(storage, "payments/" + Date.now());
-
-await uploadBytes(storageRef, file);
-
-const screenshotURL =
-await getDownloadURL(storageRef);
- await addDoc(collection(db, "bookings"), {
+await addDoc(collection(db, "bookings"), {
 
   date: date,
 
   slot: selectedSlot,
 
   mobile: mobile,
-
-  paymentScreenshot: screenshotURL,
 
   createdAt: new Date()
 
