@@ -4,7 +4,7 @@ if(localStorage.getItem("admin") != "true"){
 
 }
 
-const SLOT_PRICE = 500;
+const SLOT_PRICE = 900;
 
 async function loadBookings(){
 
