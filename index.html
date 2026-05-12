@@ -85,7 +85,12 @@ const firebaseConfig = {
   appId: "1:730324891796:web:b76d512955b3fcfa639c81"
 
 };
+const storage = getStorage(app);
 
+window.storage = storage;
+window.ref = ref;
+window.uploadBytes = uploadBytes;
+window.getDownloadURL = getDownloadURL;
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
