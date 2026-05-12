@@ -1,10 +1,6 @@
-const password = prompt("Enter Admin Password");
+if(localStorage.getItem("admin") != "true"){
 
-if(password != "12345"){
-
-  alert("Wrong Password");
-
-  window.location = "/";
+  window.location = "login.html";
 
 }
 
