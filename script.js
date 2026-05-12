@@ -125,10 +125,33 @@ document
   document.getElementById("message")
   .innerText = "✅ Booking Confirmed";
 
-  window.open(
-    `https://wa.me/91${mobile}?text=🏏 Booking Confirmed for ${selectedSlot} on ${date}`,
-    "_blank"
-  );
+const customerMsg =
+`https://wa.me/91${mobile}?text=
+🏏 Booking Confirmed
+
+📅 Date: ${date}
+
+⏰ Slot: ${selectedSlot}
+
+💰 Amount: ₹900
+
+Thank You`;
+
+window.open(customerMsg, "_blank");
+
+const adminMsg =
+`https://wa.me/918860172386?text=
+🔥 New Booking Received
+
+📅 Date: ${date}
+
+⏰ Slot: ${selectedSlot}
+
+📱 Customer: ${mobile}
+
+💰 Amount: ₹900`;
+
+window.open(adminMsg, "_blank");
 
   loadBookings();
 
