@@ -123,6 +123,55 @@ document
     return;
 
   }
+  // CHECK OVERLAP BOOKING
+
+const querySnapshot =
+await getDocs(collection(db, "bookings"));
+
+let alreadyBooked = false;
+
+const newStart =
+convertToMinutes(start);
+
+const newEnd =
+newStart + (hrs * 60);
+
+querySnapshot.forEach((docSnap) => {
+
+  const data = docSnap.data();
+
+  if(data.date == date){
+
+    const oldStart =
+    convertToMinutes(data.startTime);
+
+    const oldEnd =
+    oldStart + (data.duration * 60);
+
+    // OVERLAP CHECK
+
+    if(
+      newStart < oldEnd &&
+      newEnd > oldStart
+    ){
+
+      alreadyBooked = true;
+
+    }
+
+  }
+
+});
+
+if(alreadyBooked){
+
+  alert(
+    "This time slot is already booked"
+  );
+
+  return;
+
+}
 
   await addDoc(collection(db, "bookings"), {
 
@@ -146,3 +195,13 @@ document
   alert("Booking Successful");
 
 });
+function convertToMinutes(time){
+
+  const [h,m] = time.split(":");
+
+  return (
+    parseInt(h) * 60 +
+    parseInt(m)
+  );
+
+}
