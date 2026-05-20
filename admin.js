@@ -1,12 +1,40 @@
-if(localStorage.getItem("admin") != "true"){
+const bookingsList =
+document.getElementById("bookingsList");
 
-  window.location = "login.html";
+const totalBookings =
+document.getElementById("totalBookings");
+
+const totalRevenue =
+document.getElementById("totalRevenue");
+
+document
+.getElementById("loadBtn")
+.addEventListener("click", loadBookings);
+
+function formatTime(time){
+
+  const [hour, minute] =
+  time.split(":");
+
+  let h = parseInt(hour);
+
+  let ampm = h >= 12 ? "PM" : "AM";
+
+  h = h % 12;
+
+  h = h ? h : 12;
+
+  return `${h}:${minute} ${ampm}`;
 
 }
 
-const SLOT_PRICE = 900;
-
 async function loadBookings(){
+
+  bookingsList.innerHTML = "";
+
+  let total = 0;
+
+  let revenue = 0;
 
   const fromDate =
   document.getElementById("fromDate").value;
@@ -14,90 +42,104 @@ async function loadBookings(){
   const toDate =
   document.getElementById("toDate").value;
 
-  const bookingsList =
-  document.getElementById("bookingsList");
-
-  bookingsList.innerHTML = "";
-
-  let totalBookings = 0;
-
-  let totalRevenue = 0;
-
   const querySnapshot =
   await getDocs(collection(db, "bookings"));
 
-  querySnapshot.forEach((booking) => {
+  querySnapshot.forEach((docSnap) => {
 
-    const data = booking.data();
+    const data = docSnap.data();
 
-    let show = true;
+    if(
+      fromDate &&
+      toDate &&
+      (
+        data.date < fromDate ||
+        data.date > toDate
+      )
+    ){
 
-    if(fromDate && data.date < fromDate){
-      show = false;
+      return;
+
     }
 
-    if(toDate && data.date > toDate){
-      show = false;
-    }
+    total++;
 
-    if(show){
+    revenue += Number(data.amount);
 
-      totalBookings++;
+    const start =
+    data.startTime;
 
-      totalRevenue += SLOT_PRICE;
+    const hrs =
+    parseInt(data.duration);
 
-      bookingsList.innerHTML += `
+    const end =
+    new Date();
 
-     <div class="bookingCard">
+    const [h,m] =
+    start.split(":");
 
-        <h3>${data.slot}</h3>
+    end.setHours(parseInt(h) + hrs);
 
-        <p>📅 ${data.date}</p>
+    end.setMinutes(parseInt(m));
 
-        <p>📱 ${data.mobile}</p>
+    let endHour =
+    end.getHours()
+    .toString()
+    .padStart(2,"0");
 
-        <p>💰 ₹${SLOT_PRICE}</p>
+    let endMin =
+    end.getMinutes()
+    .toString()
+    .padStart(2,"0");
 
-        <button class="deleteBtn"
-        onclick="deleteBooking('${booking.id}')">
+    bookingsList.innerHTML += `
 
-          Delete Booking
+      <div class="bookingCard">
+
+        <h3>📅 ${data.date}</h3>
+
+        <p>
+        ⏰
+        ${formatTime(start)}
+        →
+        ${formatTime(endHour+":"+endMin)}
+        </p>
+
+        <p>
+        🕒 ${data.duration} Hour
+        </p>
+
+        <p>
+        💰 ₹${data.amount}
+        </p>
+
+        <p>
+        📱 ${data.mobile}
+        </p>
+
+        <button onclick="deleteBooking('${docSnap.id}')">
+
+          Delete
 
         </button>
 
       </div>
 
-      `;
-
-    }
+    `;
 
   });
 
-  document.getElementById("totalBookings")
-  .innerText = totalBookings;
+  totalBookings.innerText = total;
 
-  document.getElementById("totalRevenue")
-  .innerText = totalRevenue;
+  totalRevenue.innerText = revenue;
 
 }
 
-window.deleteBooking = async function(id){
-
-  const confirmDelete =
-  confirm("Delete Booking?");
-
-  if(!confirmDelete) return;
+window.deleteBooking =
+async function(id){
 
   await deleteDoc(doc(db, "bookings", id));
-
-  alert("Deleted");
 
   loadBookings();
 
 }
-
-document
-.getElementById("loadBtn")
-.addEventListener("click", loadBookings);
-
-loadBookings();
