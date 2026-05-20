@@ -193,7 +193,21 @@ if(alreadyBooked){
   .innerText = "✅ Booking Confirmed";
 
   alert("Booking Successful");
+const adminMsg =
+`https://wa.me/918860172386?text=
+🏏 NEW BOOKING
 
+📅 Date: ${date}
+
+⏰ Start Time: ${start}
+
+🕒 Duration: ${hrs} Hour
+
+💰 Amount: ₹${hrs * SLOT_PRICE}
+
+📱 Customer: ${mobile}`;
+
+window.open(adminMsg, "_blank");
 });
 function convertToMinutes(time){
 
