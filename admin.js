@@ -4,8 +4,6 @@ if(localStorage.getItem("admin") != "true"){
 
 }
 
-const SLOT_PRICE = 900;
-
 async function loadBookings(){
 
   const fromDate =
@@ -44,19 +42,27 @@ async function loadBookings(){
 
       totalBookings++;
 
-      totalRevenue += SLOT_PRICE;
+      totalRevenue += data.amount;
 
       bookingsList.innerHTML += `
 
-     <div class="bookingCard">
+      <div class="bookingCard">
 
-        <h3>${data.slot}</h3>
+        <h3>
+          🏏 ${data.slots.join(", ")}
+        </h3>
 
-        <p>📅 ${data.date}</p>
+        <p>
+          📅 ${data.date}
+        </p>
 
-        <p>📱 ${data.mobile}</p>
+        <p>
+          📱 ${data.mobile}
+        </p>
 
-        <p>💰 ₹${SLOT_PRICE}</p>
+        <p>
+          💰 ₹${data.amount}
+        </p>
 
         <button class="deleteBtn"
         onclick="deleteBooking('${booking.id}')">
