@@ -41,8 +41,8 @@ async function loadBookings(){
     if(show){
 
       totalBookings++;
-
-      totalRevenue += data.amount;
+      console.log(totalBookings);
+      totalRevenue += data.amount || 900;
 
       bookingsList.innerHTML += `
 
