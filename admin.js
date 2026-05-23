@@ -41,18 +41,40 @@ async function loadBookings(){
     if(show){
 
       totalBookings++;
-      console.log(totalBookings);
-     totalRevenue +=
-data.amount ||
-(data.slots
-? data.slots.length * 900
-: 900);
+
+      // REVENUE
+
+      const bookingAmount =
+      data.amount ||
+      (
+        data.slots
+        ? data.slots.length * 900
+        : 900
+      );
+
+      totalRevenue += bookingAmount;
+
+      // SLOT DISPLAY
+
+      let slotText = "";
+
+      if(data.slots){
+
+        slotText =
+        data.slots.join(", ");
+
+      }else{
+
+        slotText = data.slot;
+
+      }
+
       bookingsList.innerHTML += `
 
       <div class="bookingCard">
 
         <h3>
-          🏏 ${data.slots.join(", ")}
+          🏏 ${slotText}
         </h3>
 
         <p>
@@ -64,7 +86,7 @@ data.amount ||
         </p>
 
         <p>
-          💰 ₹${data.amount}
+          💰 ₹${bookingAmount}
         </p>
 
         <button class="deleteBtn"
