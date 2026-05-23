@@ -25,18 +25,49 @@
 
     <h3>Available Slots</h3>
 
-    <div class="slots">
+   <div class="tabButtons">
 
-      <button class="slot">5 PM - 6 PM</button>
-      <button class="slot">6 PM - 7 PM</button>
-      <button class="slot">7 PM - 8 PM</button>
-      <button class="slot">8 PM - 9 PM</button>
-      <button class="slot">9 PM - 10 PM</button>
-       <button class="slot">10 PM - 11 PM</button>
-       <button class="slot">11 PM - 12 PM</button>
-       <button class="slot">12 PM - 01 AM</button>
+  <button id="morningBtn">
+    ☀ Morning
+  </button>
 
-    </div>
+  <button id="nightBtn">
+    🌙 Night
+  </button>
+
+</div>
+
+<h3>Available Slots</h3>
+
+<!-- MORNING -->
+
+<div id="morningSlots" class="slots hidden">
+
+  <button class="slot">6 AM - 7 AM</button>
+  <button class="slot">7 AM - 8 AM</button>
+  <button class="slot">8 AM - 9 AM</button>
+  <button class="slot">9 AM - 10 AM</button>
+  <button class="slot">10 AM - 11 AM</button>
+  <button class="slot">11 AM - 12 PM</button>
+
+</div>
+
+<!-- NIGHT -->
+
+<div id="nightSlots" class="slots">
+
+  <button class="slot">5 PM - 6 PM</button>
+  <button class="slot">6 PM - 7 PM</button>
+  <button class="slot">7 PM - 8 PM</button>
+  <button class="slot">8 PM - 9 PM</button>
+  <button class="slot">9 PM - 10 PM</button>
+  <button class="slot">10 PM - 11 PM</button>
+  <button class="slot">11 PM - 12 PM</button>
+  <button class="slot">12 AM - 1 AM</button>
+
+</div>
+
+<h2 id="totalAmount"></h2>
 
     <input type="text" id="mobile" placeholder="Enter Mobile Number">
 
