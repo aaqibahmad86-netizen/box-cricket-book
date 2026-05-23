@@ -1,26 +1,67 @@
-let selectedSlot = "";
+let selectedSlots = [];
 
-const slots = document.querySelectorAll(".slot");
+const slots =
+document.querySelectorAll(".slot");
+
+const totalAmount =
+document.getElementById("totalAmount");
+
+const SLOT_PRICE = 900;
+
+// MULTI SLOT SELECT
 
 slots.forEach(slot => {
 
-  slot.dataset.original = slot.innerText;
+  slot.dataset.original =
+  slot.innerText;
 
   slot.addEventListener("click", () => {
 
-    if(slot.classList.contains("booked")) return;
+    if(slot.classList.contains("booked"))
+    return;
 
-    slots.forEach(btn =>
-      btn.classList.remove("selected")
-    );
+    const slotName =
+    slot.dataset.original;
 
-    slot.classList.add("selected");
+    // REMOVE SLOT
 
-    selectedSlot = slot.dataset.original;
+    if(selectedSlots.includes(slotName)){
+
+      selectedSlots =
+      selectedSlots.filter(
+        s => s != slotName
+      );
+
+      slot.classList.remove("selected");
+
+    }
+
+    // ADD SLOT
+
+    else{
+
+      selectedSlots.push(slotName);
+
+      slot.classList.add("selected");
+
+    }
+
+    updateTotal();
 
   });
 
 });
+
+// TOTAL AMOUNT
+
+function updateTotal(){
+
+  totalAmount.innerText =
+  `Total Amount ₹${selectedSlots.length * SLOT_PRICE}`;
+
+}
+
+// LOAD BOOKINGS
 
 async function loadBookings(){
 
@@ -33,9 +74,14 @@ async function loadBookings(){
 
     slot.classList.remove("selected");
 
-    slot.innerText = slot.dataset.original;
+    slot.innerText =
+    slot.dataset.original;
 
   });
+
+  selectedSlots = [];
+
+  updateTotal();
 
   const querySnapshot =
   await getDocs(collection(db, "bookings"));
@@ -46,16 +92,23 @@ async function loadBookings(){
 
     if(data.date == date){
 
-      slots.forEach(slot => {
+      data.slots.forEach(bookedSlot => {
 
-        if(slot.dataset.original == data.slot){
+        slots.forEach(slot => {
 
-          slot.classList.add("booked");
+          if(
+            slot.dataset.original ==
+            bookedSlot
+          ){
 
-          slot.innerText =
-          slot.dataset.original + " ❌";
+            slot.classList.add("booked");
 
-        }
+            slot.innerText =
+            bookedSlot + " ❌";
+
+          }
+
+        });
 
       });
 
@@ -69,6 +122,8 @@ document
 .getElementById("bookingDate")
 .addEventListener("change", loadBookings);
 
+// BOOK SLOT
+
 document
 .getElementById("bookBtn")
 .addEventListener("click", async () => {
@@ -79,13 +134,19 @@ document
   const mobile =
   document.getElementById("mobile").value;
 
-  if(date == "" || selectedSlot == "" || mobile == ""){
+  if(
+    date == "" ||
+    mobile == "" ||
+    selectedSlots.length == 0
+  ){
 
     alert("Please fill all details");
 
     return;
 
   }
+
+  // CHECK DOUBLE BOOKING
 
   let alreadyBooked = false;
 
@@ -96,12 +157,17 @@ document
 
     const data = doc.data();
 
-    if(
-      data.date == date &&
-      data.slot == selectedSlot
-    ){
+    if(data.date == date){
 
-      alreadyBooked = true;
+      selectedSlots.forEach(selSlot => {
+
+        if(data.slots.includes(selSlot)){
+
+          alreadyBooked = true;
+
+        }
+
+      });
 
     }
 
@@ -109,26 +175,34 @@ document
 
   if(alreadyBooked){
 
-    alert("Slot already booked");
+    alert(
+      "One or more slots already booked"
+    );
 
     return;
 
   }
 
+  // SAVE BOOKING
+
   await addDoc(collection(db, "bookings"), {
 
     date: date,
 
-    slot: selectedSlot,
+    slots: selectedSlots,
 
     mobile: mobile,
+
+    amount:
+    selectedSlots.length * SLOT_PRICE,
 
     createdAt: new Date()
 
   });
 
   document.getElementById("message")
-  .innerText = "✅ Booking Confirmed";
+  .innerText =
+  "✅ Booking Confirmed";
 
   // CUSTOMER WHATSAPP
 
@@ -138,9 +212,11 @@ document
 
 📅 Date: ${date}
 
-⏰ Slot: ${selectedSlot}
+⏰ Slots:
+${selectedSlots.join(", ")}
 
-💰 Amount: ₹900`;
+💰 Amount:
+₹${selectedSlots.length * SLOT_PRICE}`;
 
   window.open(customerMsg, "_blank");
 
@@ -154,16 +230,49 @@ document
 
 📅 Date: ${date}
 
-⏰ Slot: ${selectedSlot}
+⏰ Slots:
+${selectedSlots.join(", ")}
 
-📱 Customer: ${mobile}
+📱 Customer:
+${mobile}
 
-💰 Amount: ₹900`;
+💰 Amount:
+₹${selectedSlots.length * SLOT_PRICE}`;
 
     window.location.href = adminMsg;
 
   }, 1200);
 
   loadBookings();
+
+});
+
+// MORNING / NIGHT TAB
+
+const morningBtn =
+document.getElementById("morningBtn");
+
+const nightBtn =
+document.getElementById("nightBtn");
+
+const morningSlots =
+document.getElementById("morningSlots");
+
+const nightSlots =
+document.getElementById("nightSlots");
+
+morningBtn.addEventListener("click", () => {
+
+  morningSlots.classList.remove("hidden");
+
+  nightSlots.classList.add("hidden");
+
+});
+
+nightBtn.addEventListener("click", () => {
+
+  nightSlots.classList.remove("hidden");
+
+  morningSlots.classList.add("hidden");
 
 });
