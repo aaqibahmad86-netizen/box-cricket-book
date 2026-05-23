@@ -1,104 +1,73 @@
-const startTime =
-document.getElementById("startTime");
+let selectedSlot = "";
 
-const duration =
-document.getElementById("duration");
+const slots = document.querySelectorAll(".slot");
 
-const summary =
-document.getElementById("timeSummary");
+slots.forEach(slot => {
 
-const totalAmount =
-document.getElementById("totalAmount");
+  slot.dataset.original = slot.innerText;
 
-const SLOT_PRICE = 900;
+  slot.addEventListener("click", () => {
 
-// CREATE 24 HOUR TIME OPTIONS
+    if(slot.classList.contains("booked")) return;
 
-for(let h=0; h<24; h++){
+    slots.forEach(btn =>
+      btn.classList.remove("selected")
+    );
 
-  for(let m=0; m<60; m+=30){
+    slot.classList.add("selected");
 
-    const option =
-    document.createElement("option");
+    selectedSlot = slot.dataset.original;
 
-    const hour =
-    h.toString().padStart(2,"0");
+  });
 
-    const minute =
-    m.toString().padStart(2,"0");
+});
 
-    option.value = `${hour}:${minute}`;
+async function loadBookings(){
 
-    option.text =
-    formatTime(hour, minute);
+  const date =
+  document.getElementById("bookingDate").value;
 
-    startTime.appendChild(option);
+  slots.forEach(slot => {
 
-  }
+    slot.classList.remove("booked");
 
-}
+    slot.classList.remove("selected");
 
-function formatTime(hour, minute){
+    slot.innerText = slot.dataset.original;
 
-  let h = parseInt(hour);
+  });
 
-  let ampm = h >= 12 ? "PM" : "AM";
+  const querySnapshot =
+  await getDocs(collection(db, "bookings"));
 
-  h = h % 12;
+  querySnapshot.forEach((doc) => {
 
-  h = h ? h : 12;
+    const data = doc.data();
 
-  return `${h}:${minute} ${ampm}`;
+    if(data.date == date){
 
-}
+      slots.forEach(slot => {
 
-function updateSummary(){
+        if(slot.dataset.original == data.slot){
 
-  const start =
-  startTime.value;
+          slot.classList.add("booked");
 
-  const hrs =
-  parseInt(duration.value);
+          slot.innerText =
+          slot.dataset.original + " ❌";
 
-  const [h,m] =
-  start.split(":");
+        }
 
-  const end =
-  new Date();
+      });
 
-  end.setHours(parseInt(h) + hrs);
+    }
 
-  end.setMinutes(parseInt(m));
-
-  let endHour =
-  end.getHours()
-  .toString()
-  .padStart(2,"0");
-
-  let endMin =
-  end.getMinutes()
-  .toString()
-  .padStart(2,"0");
-
-  summary.innerText =
-  `${formatTime(h,m)} → ${formatTime(endHour,endMin)}`;
-
-  totalAmount.innerText =
-  `₹${hrs * SLOT_PRICE}`;
+  });
 
 }
 
-startTime.addEventListener(
-  "change",
-  updateSummary
-);
-
-duration.addEventListener(
-  "change",
-  updateSummary
-);
-
-updateSummary();
+document
+.getElementById("bookingDate")
+.addEventListener("change", loadBookings);
 
 document
 .getElementById("bookBtn")
@@ -110,80 +79,49 @@ document
   const mobile =
   document.getElementById("mobile").value;
 
-  const start =
-  startTime.value;
+  if(date == "" || selectedSlot == "" || mobile == ""){
 
-  const hrs =
-  duration.value;
-
-  if(date == "" || mobile == ""){
-
-    alert("Fill all details");
+    alert("Please fill all details");
 
     return;
 
   }
-  // CHECK OVERLAP BOOKING
 
-const querySnapshot =
-await getDocs(collection(db, "bookings"));
+  let alreadyBooked = false;
 
-let alreadyBooked = false;
+  const querySnapshot =
+  await getDocs(collection(db, "bookings"));
 
-const newStart =
-convertToMinutes(start);
+  querySnapshot.forEach((doc) => {
 
-const newEnd =
-newStart + (hrs * 60);
-
-querySnapshot.forEach((docSnap) => {
-
-  const data = docSnap.data();
-
-  if(data.date == date){
-
-    const oldStart =
-    convertToMinutes(data.startTime);
-
-    const oldEnd =
-    oldStart + (data.duration * 60);
-
-    // OVERLAP CHECK
+    const data = doc.data();
 
     if(
-      newStart < oldEnd &&
-      newEnd > oldStart
+      data.date == date &&
+      data.slot == selectedSlot
     ){
 
       alreadyBooked = true;
 
     }
 
+  });
+
+  if(alreadyBooked){
+
+    alert("Slot already booked");
+
+    return;
+
   }
-
-});
-
-if(alreadyBooked){
-
-  alert(
-    "This time slot is already booked"
-  );
-
-  return;
-
-}
 
   await addDoc(collection(db, "bookings"), {
 
     date: date,
 
-    startTime: start,
-
-    duration: hrs,
+    slot: selectedSlot,
 
     mobile: mobile,
-
-    amount: hrs * SLOT_PRICE,
 
     createdAt: new Date()
 
@@ -192,30 +130,40 @@ if(alreadyBooked){
   document.getElementById("message")
   .innerText = "✅ Booking Confirmed";
 
-  alert("Booking Successful");
-const adminMsg =
-`https://wa.me/918860172386?text=
-🏏 NEW BOOKING
+  // CUSTOMER WHATSAPP
+
+  const customerMsg =
+  `https://wa.me/91${mobile}?text=
+🏏 Booking Confirmed
 
 📅 Date: ${date}
 
-⏰ Start Time: ${start}
+⏰ Slot: ${selectedSlot}
 
-🕒 Duration: ${hrs} Hour
+💰 Amount: ₹900`;
 
-💰 Amount: ₹${hrs * SLOT_PRICE}
+  window.open(customerMsg, "_blank");
 
-📱 Customer: ${mobile}`;
+  // ADMIN WHATSAPP
 
-window.open(adminMsg, "_blank");
+  setTimeout(() => {
+
+    const adminMsg =
+    `https://wa.me/918860172386?text=
+🔥 NEW BOOKING
+
+📅 Date: ${date}
+
+⏰ Slot: ${selectedSlot}
+
+📱 Customer: ${mobile}
+
+💰 Amount: ₹900`;
+
+    window.location.href = adminMsg;
+
+  }, 1200);
+
+  loadBookings();
+
 });
-function convertToMinutes(time){
-
-  const [h,m] = time.split(":");
-
-  return (
-    parseInt(h) * 60 +
-    parseInt(m)
-  );
-
-}
