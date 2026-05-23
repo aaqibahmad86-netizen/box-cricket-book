@@ -42,8 +42,11 @@ async function loadBookings(){
 
       totalBookings++;
       console.log(totalBookings);
-      totalRevenue += data.amount || 900;
-
+     totalRevenue +=
+data.amount ||
+(data.slots
+? data.slots.length * 900
+: 900);
       bookingsList.innerHTML += `
 
       <div class="bookingCard">
